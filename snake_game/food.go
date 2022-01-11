@@ -3,45 +3,37 @@ package snake_game
 import ( 
 
 	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/imdraw"
+	//"github.com/faiface/pixel/imdraw"
+	//"github.com/faiface/pixel/pixelgl"
 	"math/rand"
-
-
-	"image/color"
 	)
 
 type food struct {
-	food rune
+	sprite *pixel.Sprite
 	rect  pixel.Rect
-	color color.Color
 	position coordinates
 }
 
-func (f *food) draw(imd *imdraw.IMDraw) {
-	imd.Color = f.color
-	imd.Push(f.rect.Min, f.rect.Max)
-	imd.Rectangle(2)
+/*
+func (f *food) drawFood(canvas pixelgl.canvas, sprite pixel.Sprite) {
+
+	sprite.Draw(canvas, pixel.IM.Scaled(pixel.ZV,0.3).Moved(canvas.Bounds().Center()))
+
 }
 
+*/
 // return the coordinates of the food on display
 func (f *food) foodPosition() (int, int) {
 	return f.position.x, f.position.y
 }
 
-func generateFood(coord coordinates) *food {
-	return &food{
-		food: randomFood(),
-		position: coord,
-	}
 
+
+func randomPosition() (float64, float64){
+	newX := rand.Intn(80 - (-80)) + (-80)
+	newY := rand.Intn(80 - (-80)) + (-80)
+	return  float64(newX), float64(newY)
 }
-
-func (f *food) randomPosition() {
-	newX := rand.Intn(100-1) +1
-	newY := rand.Intn(100-1) +1
-	f.position.x, f.position.y = newX, newY
-}
-
 // A rune is an alias to the int32 data type. It represents a Unicode code point.
 func randomFood() rune {
 

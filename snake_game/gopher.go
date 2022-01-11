@@ -1,92 +1,14 @@
 package snake_game
 
 import ("fmt"
-"encoding/csv"
-"image"
 
-"io"
 "math"
-
-"os"
-"strconv"
-
 
 _ "image/png"
 
 "github.com/faiface/pixel"
-
-
-"github.com/pkg/errors"
-
-
 )
 
-// function shamelessly stolen from https://github.com/faiface/pixel-examples/tree/master/platformer
-func loadAnimationSheet(sheetPath, descPath string, frameWidth float64) (sheet pixel.Picture, anims map[string][]pixel.Rect, err error) {
-	// total hack, nicely format the error at the end, so I don't have to type it every time
-	defer func() {
-		if err != nil {
-			err = errors.Wrap(err, "error loading animation sheet")
-		}
-	}()
-
-	// open and load the spritesheet
-	sheetFile, err := os.Open(sheetPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer sheetFile.Close()
-	sheetImg, _, err := image.Decode(sheetFile)
-	if err != nil {
-		return nil, nil, err
-	}
-	sheet = pixel.PictureDataFromImage(sheetImg)
-
-	// create a slice of frames inside the spritesheet
-	var frames []pixel.Rect
-	for x := 0.0; x+frameWidth <= sheet.Bounds().Max.X; x += frameWidth {
-		frames = append(frames, pixel.R(
-			x,
-			0,
-			x+frameWidth,
-			sheet.Bounds().H(),
-		))
-	}
-	descFile, err := os.Open(descPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer descFile.Close()
-
-	anims = make(map[string][]pixel.Rect)
-
-	// load the animation information, name and interval inside the spritesheet
-	desc := csv.NewReader(descFile)
-	for {
-		anim, err := desc.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, nil, err
-		}
-
-		name := anim[0]
-		start, _ := strconv.Atoi(anim[1])
-		end, _ := strconv.Atoi(anim[2])
-
-		anims[name] = frames[start : end+1]
-	}
-
-	return sheet, anims, nil
-}
-
-type gopher struct {
-	name string
-	bodyLength int
-	direction direction 
-	position []coordinates
-}
 
 type direction int // make a new type direction, We could just use int, but naming it direction is more underestandable I guess.
 
@@ -200,17 +122,12 @@ func (ga *gopherAnim) draw(t pixel.Target, phys *gopherAnim) {
 	)
 }
 
-
+/*
 //main gopher is the "snake" head.
 func (gopher *gopher) mainGopher() *coordinates {
 	return &gopher.position[len(gopher.position)-1]
 }
-
-func (gop *gopher) update(tmp float64, ctrl pixel.Vec, food []food) {
-
-	
-
-}
+*/
 
 func foodFound(tmp coordinates, coord coordinates) bool {
 	return tmp.x == coord.x && tmp.y == coord.y

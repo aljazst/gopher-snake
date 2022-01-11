@@ -46,15 +46,15 @@ func run() {
 	
 	
 	// hardcoded level  https://pkg.go.dev/github.com/faiface/pixel#R
-	platforms := []food{
-		{rect: pixel.R(1, -34, 50, -32)},
-		{rect: pixel.R(1, 0, 70, 2)},
-		{rect: pixel.R(1, 10, -50, 12)},
+	border := border{
+		rect: pixel.R(-160/2, -120/2, 160/2, 120/2),
+		//{rect: pixel.R(1, 0, 70, 2)},
+		//{rect: pixel.R(1, 10, -50, 12)},
 		
 	}
-	for i := range platforms {
-		platforms[i].color = randomNiceColor()
-	}
+	
+	border.color = randomNiceColor()
+	
 
 	canvas := pixelgl.NewCanvas(pixel.R(-160/2, -120/2, 160/2, 120/2))
 	imd := imdraw.New(sheet)
@@ -63,8 +63,18 @@ func run() {
 
 	last := time.Now()
 
-	for !win.Closed() {
+
+
+	pic, err := loadPicture("cake.png")
+	if err != nil {
+		panic(err)
+	}
+
+	sprite := pixel.NewSprite(pic, pic.Bounds())
 	
+
+	for !win.Closed() {
+		rand.Seed(time.Now().UnixNano())
 		dt := time.Since(last).Seconds()
 		last = time.Now()
 		
@@ -77,6 +87,7 @@ func run() {
 		}
 
 		ctrl := pixel.ZV
+
 		if win.Pressed(pixelgl.KeyLeft) {
 			ctrl.X--
 		}
@@ -96,12 +107,13 @@ func run() {
 		imd.Clear()
 
 
-		for _, p := range platforms {
-			p.draw(imd)
-		}
+		//draw the border
+		border.draw(imd)
+		
 		anim.draw(imd,anim)
 		imd.Draw(canvas)
-
+		sprite.Draw(canvas, pixel.IM.Scaled(pixel.ZV,0.3).Moved(pixel.V(randomPosition())).Rotated(pixel.ZV, math.Pi/2))
+		
 
 		win.Clear(colornames.White)
 		// stretch the canvas to the window
@@ -115,6 +127,8 @@ func run() {
 
 		win.Update()
 	}
+
+	
 }
 
 func randomNiceColor() pixel.RGBA {
