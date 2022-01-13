@@ -4,7 +4,7 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/imdraw"
-	"math/rand"
+
 
 
 	"image/color"

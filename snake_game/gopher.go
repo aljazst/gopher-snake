@@ -35,6 +35,8 @@ type gopherAnim struct {
 	rect   pixel.Rect
 
 	vel    pixel.Vec
+
+	border bool
 }
 func (ga *gopherAnim) resetVel()  {
 	ga.vel.X = 0
@@ -42,7 +44,7 @@ func (ga *gopherAnim) resetVel()  {
 }
 
 
-func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec) {
+func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *border) {
 	
 	ga.counter += dt
 
@@ -68,32 +70,38 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec) {
 
 	ga.rect = ga.rect.Moved(ga.vel.Scaled(dt))
 
+	//fmt.Println("ga.rect.Max.X: ",ga.rect.Max.X, "bor.rect.Max.X: ", bor.rect.Max.X)
+
+	//fmt.Println("ga.rect.Min.X: ",ga.rect.Min.X, "bor.rect.Min.X: ", bor.rect.Min.X)
+	ga.border = false
+	if ga.rect.Max.X >= bor.rect.Max.X || ga.rect.Min.X <= bor.rect.Min.X {
+		ga.border = true
+	}
+	if ga.rect.Min.Y <= bor.rect.Min.Y || ga.rect.Max.Y >= bor.rect.Max.Y {
+		ga.border = true
+	}
+
 	// determine the correct animation frame
 	switch ga.direction {
-	//case GOPHER_LEFT:
-	//	ga.frame = ga.anims["Front"][0]
+
 	case GOPHER_RIGHT:
 		i := int(math.Floor(ga.counter / ga.rate))
 		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
-		fmt.Println("1",ga.frame)
 	case GOPHER_LEFT:
 		i := int(math.Floor(ga.counter / ga.rate))
 		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
-		fmt.Println("2",ga.frame)
 	case GOPHER_UP:
 		//speed := phys.vel.Y
 		i := len(ga.anims["Jump"]) - 1
 		ga.frame = ga.anims["Jump"][i]
-		fmt.Println("3",ga.frame)
+
 	case GOPHER_DOWN:
 		i := len(ga.anims["Jump"]) - 1
 		
 		ga.frame = ga.anims["Jump"][i]
-		fmt.Println("4",ga.frame)
-		
+	
 	default: 
 		ga.frame = ga.anims["Front"][0]
-		fmt.Println("5",ga.frame)
 	}
 
 
