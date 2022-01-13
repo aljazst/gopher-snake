@@ -46,11 +46,15 @@ func run() {
 	
 	
 	// hardcoded level  https://pkg.go.dev/github.com/faiface/pixel#R
-	border := border{
+	border := &border{
 		rect: pixel.R(-160/2, -120/2, 160/2, 120/2),
 		//{rect: pixel.R(1, 0, 70, 2)},
 		//{rect: pixel.R(1, 10, -50, 12)},
 		
+	}
+
+	food := food{
+
 	}
 	
 	border.color = randomNiceColor()
@@ -86,6 +90,10 @@ func run() {
 			anim.vel = pixel.ZV
 		}
 
+		if win.JustPressed(pixelgl.KeyJ) {
+			food.pressed = true
+		}
+
 		ctrl := pixel.ZV
 
 		if win.Pressed(pixelgl.KeyLeft) {
@@ -101,18 +109,22 @@ func run() {
 			ctrl.Y--
 		}
 
-		anim.update(dt,anim,ctrl)
+		anim.update(dt,anim,ctrl, border)
 
 		canvas.Clear(colornames.Black)
 		imd.Clear()
 
+		if anim.border {
+			anim.rect = anim.rect.Moved(anim.rect.Center().Scaled(-1))
+			anim.vel = pixel.ZV
+		}
 
 		//draw the border
 		border.draw(imd)
 		
 		anim.draw(imd,anim)
 		imd.Draw(canvas)
-		sprite.Draw(canvas, pixel.IM.Scaled(pixel.ZV,0.3).Moved(pixel.V(randomPosition())).Rotated(pixel.ZV, math.Pi/2))
+		sprite.Draw(canvas, pixel.IM.Scaled(pixel.ZV,0.3).Moved(pixel.V(food.randomPosition())).Rotated(pixel.ZV, math.Pi/2))
 		
 
 		win.Clear(colornames.White)

@@ -6,13 +6,18 @@ import (
 	//"github.com/faiface/pixel/imdraw"
 	//"github.com/faiface/pixel/pixelgl"
 	"math/rand"
+
 	)
 
+	
 type food struct {
 	sprite *pixel.Sprite
 	rect  pixel.Rect
 	position coordinates
+
+	pressed bool
 }
+var newX, newY int = 0,0
 
 /*
 func (f *food) drawFood(canvas pixelgl.canvas, sprite pixel.Sprite) {
@@ -29,9 +34,15 @@ func (f *food) foodPosition() (int, int) {
 
 
 
-func randomPosition() (float64, float64){
-	newX := rand.Intn(80 - (-80)) + (-80)
-	newY := rand.Intn(80 - (-80)) + (-80)
+func( f *food) randomPosition() (float64, float64){
+	
+
+	if(f.pressed){
+		newX = rand.Intn(80 - (-80)) + (-80)
+		newY = rand.Intn(80 - (-80)) + (-80)
+		f.pressed = false
+	}
+
 	return  float64(newX), float64(newY)
 }
 // A rune is an alias to the int32 data type. It represents a Unicode code point.
