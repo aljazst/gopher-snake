@@ -20,7 +20,7 @@ func run() {
 	rand.Seed(time.Now().UnixNano())
 
 	sheet, anims, err := loadAnimationSheet("sheet.png", "sheet.csv", 12)
-
+	emojiImg, frame, err := loadGopherEmoji("gopher_emojis.png",96, 96)
 	if err != nil {
 
 		panic(err)
@@ -53,8 +53,9 @@ func run() {
 		
 	}
 
-	food := food{
-
+	food := &food{
+		emojiImg: emojiImg,
+		frame: frame,
 	}
 	
 	border.color = randomNiceColor()
@@ -67,23 +68,11 @@ func run() {
 
 	last := time.Now()
 
-
-
-	pic, err := loadPicture("cake.png")
-	if err != nil {
-		panic(err)
-	}
-
-	sprite := pixel.NewSprite(pic, pic.Bounds())
-	
-
+	//sprite.Draw(win, mat)
 	for !win.Closed() {
 		rand.Seed(time.Now().UnixNano())
 		dt := time.Since(last).Seconds()
 		last = time.Now()
-		
-
-
 
 		if win.JustPressed(pixelgl.KeyEnter) {
 			anim.rect = anim.rect.Moved(anim.rect.Center().Scaled(-1))
@@ -92,6 +81,9 @@ func run() {
 
 		if win.JustPressed(pixelgl.KeyJ) {
 			food.pressed = true
+		}
+		if win.JustPressed(pixelgl.KeyEscape) {
+			win.Destroy() //close the window
 		}
 
 		ctrl := pixel.ZV
@@ -109,7 +101,7 @@ func run() {
 			ctrl.Y--
 		}
 
-		anim.update(dt,anim,ctrl, border)
+		anim.update(dt,anim,ctrl, border, food)
 
 		canvas.Clear(colornames.Black)
 		imd.Clear()
@@ -122,10 +114,9 @@ func run() {
 		//draw the border
 		border.draw(imd)
 		
-		anim.draw(imd,anim)
+		anim.drawGopher(imd,anim)
 		imd.Draw(canvas)
-		sprite.Draw(canvas, pixel.IM.Scaled(pixel.ZV,0.3).Moved(pixel.V(food.randomPosition())).Rotated(pixel.ZV, math.Pi/2))
-		
+		food.drawEmoji(canvas,food)
 
 		win.Clear(colornames.White)
 		// stretch the canvas to the window
