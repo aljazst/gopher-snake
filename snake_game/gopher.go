@@ -9,6 +9,8 @@ _ "image/png"
 "github.com/faiface/pixel"
 )
 
+var pathHolderX bool = false
+var pathHolderY bool = false
 
 type direction int // make a new type direction, We could just use int, but naming it direction is more underestandable I guess.
 
@@ -44,7 +46,7 @@ func (ga *gopherAnim) resetVel()  {
 }
 
 
-func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *border) {
+func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *border, food *food) {
 	
 	ga.counter += dt
 
@@ -80,6 +82,29 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *b
 	if ga.rect.Min.Y <= bor.rect.Min.Y || ga.rect.Max.Y >= bor.rect.Max.Y {
 		ga.border = true
 	}
+	
+	// adding +5 or -15 to the offset. +5 if comming at the emoji from the left and -15 if comming at it from the right. It is how it is.
+
+	if math.Round(ga.rect.Max.X)+5 == food.position.X || math.Round(ga.rect.Max.X)-15 == food.position.X || pathHolderY {
+		pathHolderY = true
+		if math.Round(ga.rect.Max.Y)+5 == food.position.Y || math.Round(ga.rect.Max.Y)-15 == food.position.Y {
+			food.collected = true
+			pathHolderX = false
+			pathHolderY = false
+			fmt.Println("WINWINWINWINWINWINWINWINWINWINWINWINWINWINWIN")
+		}
+	}
+	if math.Round(ga.rect.Max.Y)+5 == food.position.Y || math.Round(ga.rect.Max.Y)-15 == food.position.Y || pathHolderX {
+		pathHolderX = true
+		if math.Round(ga.rect.Max.X)+5 == food.position.X || math.Round(ga.rect.Max.X)-15 == food.position.X {
+			food.collected = true
+			pathHolderY = false
+			pathHolderX = false
+			fmt.Println("WINWINWINWINWINWINWINWINWINWINWINWINWINWINWIN")
+		}
+	}
+
+	fmt.Println("Gopher: Min X: ", math.Round(ga.rect.Min.X) , "Min Y: ",math.Round(ga.rect.Min.Y),   " Max X:", math.Round(ga.rect.Max.X), " Max Y: ", math.Round(ga.rect.Max.Y))
 
 	// determine the correct animation frame
 	switch ga.direction {
@@ -91,13 +116,10 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *b
 		i := int(math.Floor(ga.counter / ga.rate))
 		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
 	case GOPHER_UP:
-		//speed := phys.vel.Y
-		i := len(ga.anims["Jump"]) - 1
-		ga.frame = ga.anims["Jump"][i]
-
+		i := int(math.Floor(ga.counter / ga.rate))
+		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
 	case GOPHER_DOWN:
 		i := len(ga.anims["Jump"]) - 1
-		
 		ga.frame = ga.anims["Jump"][i]
 	
 	default: 
@@ -114,10 +136,11 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *b
 		}
 	} 
 }
-func (ga *gopherAnim) draw(t pixel.Target, phys *gopherAnim) {
+func (ga *gopherAnim) drawGopher(t pixel.Target, phys *gopherAnim) {
 	if ga.sprite == nil {
 		ga.sprite = pixel.NewSprite(nil, pixel.Rect{})
 	}
+	//fmt.Println("frame; ",ga.frame )
 	// draw the correct frame with the correct position and direction
 	ga.sprite.Set(ga.sheet, ga.frame)
 	ga.sprite.Draw(t, pixel.IM.
@@ -125,7 +148,7 @@ func (ga *gopherAnim) draw(t pixel.Target, phys *gopherAnim) {
 			phys.rect.W()/ga.sprite.Frame().W(),
 			phys.rect.H()/ga.sprite.Frame().H(),
 		)).
-		ScaledXY(pixel.ZV,pixel.V(-ga.dir, 1)).
+		ScaledXY(pixel.ZV,pixel.V(-ga.dir, 1.0)).
 		Moved(phys.rect.Center()),
 	)
 }
