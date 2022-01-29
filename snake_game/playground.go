@@ -22,10 +22,5 @@ func (f *border) draw(imd *imdraw.IMDraw) {
 	imd.Rectangle(2)
 }
 
-// return the coordinates of the food on display
-func (f *border) foodPosition() (int, int) {
-	return f.position.x, f.position.y
-}
-
 
 
