@@ -4,7 +4,7 @@ This is an attempt to make Go 2D snake game. It's my first project in Go, dedica
 
 ## How it works
 
-It's like a basic snake game. Use the arrow keys to move around. Press J for a new random position of the Gopher emoji. If you press the Esc key the game will close.
+It's like a basic snake game. Use the arrow keys to move around. Press J for a new random position of the Gopher emoji. If you press the Esc key, the game will close.
 
 ## How it looks currently
 
@@ -34,7 +34,7 @@ Legend:
 - 💭 Not yet implemented, still in my mind!
 - 🏗 Working on it
 
-## My thougs on Go
+## My thoughts on Go
 
 I like it. I like it a lot. I mean, I am still a rookie but I am eager to learn the language. But, I don't like game development. Some aspects of it just don't suit me. That's probably why the game will remain unfinished.
 
