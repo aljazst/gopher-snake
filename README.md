@@ -1,6 +1,7 @@
 # Gopher snake
 
-This is a attempt to make a pure Go 2D snake game. It's my first project in go, dedicated to learning the basics of the language. 🚧 In progress! 🚧 
+This is a attempt to make a pure Go 2D snake game. It's my first project in go, dedicated to learning the basics of the language.
+🚧 In progress! 🚧 
 
 ## How it works
 
@@ -12,9 +13,9 @@ It's like a basic snake game. Use the arrow keys to move around. Press J for a n
 
 ## Documentation
 
-[Pixel 2D game library used](https://github.com/faiface/pixel)
+[Pixel 2D game library](https://github.com/faiface/pixel)
 
-[Pixel example game](https://github.com/faiface/pixel-examples/tree/master/platformer) A lot of the logic is borrowed from this repo.
+[Pixel example game](https://github.com/faiface/pixel-examples/tree/master/platformer) -> A lot of the logic is borrowed from this repo.
 
 The Gopher spritesheet and the Gopher emojis (png images loose quality when shrinked and displaying in canvas, thats why the emojis don't look as good in the game) comes from  the fantastic [Egon Elbre](https://github.com/egonelbre/gophers).
 
