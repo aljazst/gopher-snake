@@ -1,7 +1,6 @@
 # Gopher snake
 
-This is a attempt to make a pure Go 2D snake game. It's my first project in go, dedicated to learning the basics of the language.
-🚧 In progress! 🚧 
+This is a attempt to make a pure Go 2D snake game. It's my first project in go, dedicated to learning the basics of the language.         🚧 In progress! 🚧 
 
 ## How it works
 
