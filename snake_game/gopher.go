@@ -104,7 +104,7 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *b
 		}
 	}
 
-	fmt.Println("Gopher: Min X: ", math.Round(ga.rect.Min.X) , "Min Y: ",math.Round(ga.rect.Min.Y),   " Max X:", math.Round(ga.rect.Max.X), " Max Y: ", math.Round(ga.rect.Max.Y))
+	//fmt.Println("Gopher: Min X: ", math.Round(ga.rect.Min.X) , "Min Y: ",math.Round(ga.rect.Min.Y),   " Max X:", math.Round(ga.rect.Max.X), " Max Y: ", math.Round(ga.rect.Max.Y))
 
 	// determine the correct animation frame
 	switch ga.direction {
@@ -119,8 +119,10 @@ func (ga *gopherAnim) update( dt float64,phys *gopherAnim,ctrl pixel.Vec, bor *b
 		i := int(math.Floor(ga.counter / ga.rate))
 		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
 	case GOPHER_DOWN:
-		i := len(ga.anims["Jump"]) - 1
-		ga.frame = ga.anims["Jump"][i]
+		//i := len(ga.anims["Jump"]) - 1
+		//ga.frame = ga.anims["Jump"][i]
+		i := int(math.Floor(ga.counter / ga.rate))
+		ga.frame = ga.anims["Run"][i%len(ga.anims["Run"])]
 	
 	default: 
 		ga.frame = ga.anims["Front"][0]
@@ -151,19 +153,4 @@ func (ga *gopherAnim) drawGopher(t pixel.Target, phys *gopherAnim) {
 		ScaledXY(pixel.ZV,pixel.V(-ga.dir, 1.0)).
 		Moved(phys.rect.Center()),
 	)
-}
-
-/*
-//main gopher is the "snake" head.
-func (gopher *gopher) mainGopher() *coordinates {
-	return &gopher.position[len(gopher.position)-1]
-}
-*/
-
-func foodFound(tmp coordinates, coord coordinates) bool {
-	return tmp.x == coord.x && tmp.y == coord.y
-}
-
-func test()  {
-	fmt.Println("hel")
 }

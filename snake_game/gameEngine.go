@@ -56,6 +56,7 @@ func run() {
 	food := &food{
 		emojiImg: emojiImg,
 		frame: frame,
+		collected: true,
 	}
 	
 	border.color = randomNiceColor()
@@ -79,6 +80,7 @@ func run() {
 			anim.vel = pixel.ZV
 		}
 
+		//get a new emoji
 		if win.JustPressed(pixelgl.KeyJ) {
 			food.pressed = true
 		}
